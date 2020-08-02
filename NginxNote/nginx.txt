@@ -1,0 +1,18 @@
+1.官网下载nginx windows压缩包，解压到本地，
+解压完成后不要直接双击nginx.exe，否则会出问题
+2.cmd打开命令行，进入到nginx的根目录，
+命令start nginx启动nginx服务，在启动服务之前最好
+修改nginx的配置文件，修改端口。
+3.打开任务管理器查看nginx服务是否启动。
+4.通过nginx索引访问本地资源。
+新建一个文件夹，里面任意添加一个txt文件，注意不能
+以中文命名。
+修改nginx的conf
+添加：
+location /hotfix {
+			alias D:\NewLife2020\hotfix;
+			allow all;
+			autoindex on;
+		}
+5.重新启动nginx服务，命令行nginx -s stop先结束，再start nginx打开。
+6.打开浏览器访问localhost:8080/hotfix即可访问本地资源.
