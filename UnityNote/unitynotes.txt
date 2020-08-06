@@ -1,0 +1,105 @@
+eventtrigger 事件触发器
+	pointenter:鼠标放在触发区域时
+	pointexit:鼠标离开触发区域
+
+Class A<T> where T ：A
+	where T ：A是一个约束条件，表示T类是继承与A的
+	where T: struct                                     T必须是一个结构类型
+  	where T: class                                       T必须是一个类(class)类型，不是结构(structure)类型
+  	where T: new()                                      T必须要有一个无参构造函数
+  	where T: NameOfBaseClass                     T必须继承名为NameOfBaseClass的类
+  	where T: NameOfInterface                      T必须实现名为NameOfInterface的接口
+
+泛型类：
+	如：class SafeObjectPool<T>{}
+	Log.I(SingletonCreator.CreateSingleton<SafeObjectPool<QFramework.AssetBundleRes>>());
+	打印结果如:  SafeObjectPool`1[QFramework.AssetBundleRes]
+	`1表示元数，它叫做元数也就是参数数量，表示声明泛型类时要求的类型实参的数量，
+
+QF使用：
+	UIKIT的使用：
+	把UIRoot拖入场景中，要制作的panel放在Design下，制作完成后，将panel拖到
+	art/uiprefabs下做成预制体，点击右键标记reskit，并点击uikit生成ui代码，
+	在uicontroller中就能访问panel相对应的类，通过UIKit.OpenPanel<UIPanel>()和
+	UIKit.ClosePanel<UIPanel>()来打开和关闭panel.
+	脚本绑定：在父类上alt+v，子类上alt+b，点击生成代码，就可以生成父节点的类，
+	在父类中通过子类名字就可以访问子类的游戏对象.
+
+	TypeEventSystem使用：
+	注册事件TypeEventSystem.Register<GameOverEvent类>(OnGameOverEvent回调方法);
+	执行事件TypeEventSystem.Send(new GameOverEvent());
+	
+Gaia使用：
+	打开gaia manager，点击配置环境，更改unity渲染路劲为linear，安装shader，
+	创建create terrian and tools，完成创建，在生成的stamps上选择要生成的地图
+	，点击stamps即可生成terrians，在gaia下的	spawner点击随机生成石头，草，树等
+	元素，这些元素会被添加到terrians上，
+	
+CTS使用：
+	在已有的terrians上增加CTS，点击windows/produalworld/add cts to terrians，
+	然后创建一个CTS Profiles，添加到cts上
+
+
+项目升级为HDRP:
+	将要升级的项目中的material的shader都设置为standard，然后export成unitypackage，
+	导入hdrp工程中，edit -》 render pipeline-》urgrade project material to high defined 		
+	materials,将项目中的材质升级为高清材质，新建一个hdrp文件，设置好抗锯齿等参数，在
+	project settings 中的defualt hdrp拖入写好的hdrp文件，完成设置；在hdrp的默认场景中
+	取出灯光，相机，天空盒等带有hdrp设置的游戏物体，做成预制体，将预制体拖入要升级的
+	项目中，在原有的基础上进行修改和增加hdrp参数设置。勾选渲染器下addtional settings的
+	dynamic occlusion选项。设置天空盒：将要使用的天空盒照片（hdri格式）的形状转换为			
+	cube，调整max size,添加hdri sky脚本，设置为前面的照片，选择光照模式为曝光模式，在
+	visual environment选择type为hdri sky。
+	另：若要在游戏物体上添加hdrp的类，先在游戏物体上添加volume脚本，再点击add 			
+	override选择要添加的hdrp脚本。
+	拓展：若项目不使用实时光照进行渲染，而使用烘焙进行渲染，则：所有要烘焙的游戏物体的
+	mesh都勾选上generate lightmap uvs，即支持使用光照贴图，将灯光和所有要烘焙的游戏物		
+	体设置为static，选择灯光的渲染模式为bake，等待烘焙完成就将灯光关闭。
+	
+	体积光，体积雾：
+	设置fog ：打开volumetric fog，在project setting中，勾选volumetric 
+	添加组件Density volume，将需要添加效果的区域添加volume，调整到适当大小，参数，将
+	distance调整到合适大小即可。
+
+	添加反射探头-reflection probe：
+	点击创建，lighting-》reflection probe，选择探头的类型为baked，调整效果影响区域大小，
+	把场景中的静态游戏物体设置reflection probe static，产生的效果：影响区域中的游戏物体
+	变得更亮了。
+
+	hdrp资料：https://www.bilibili.com/read/cv5338316
+	hdri图片：https://hdrihaven.com/hdri/?h=abandoned_tank_farm_01
+	hdrp抗锯齿设置：hd文件中-》lit shader mode选择both，multisample anti选择msaa 8x,
+	camera选择anti-allasing 选择TAA
+
+	踩坑记录：
+		road升级后会严重闪烁，解决方法：shader选择为hdrp/lit,surface type选择opaque。
+	normal map  space 选择 objectspace。
+		导入fbx模型时，无法修改fbx中的材质，首先选中fbx文件，-》materials，location选		
+		择use external legacy，点击apply，系统会将fbx中的材质导出到本地，再将材质替换
+		到需要更换的物体上。
+		地形加上cts后会严重闪烁，解决方法：更换terrian的shader为lod类型的，修改cts配		
+		置即可，修改lod值为1.
+		从其他项目中导入terrian文件以及cts文件进行替换，树木等资源的目录必须与原项目的		
+		路径一致，否则无法显示。替换：将要被替换的terrian文件删除，再将terrian置为none，
+		将新的terrians导入项目中并选择，若terrian贴图丢失，手动选择贴图，从后往前选择贴
+		图替换（从前往后	会导致后面的贴图会被覆盖）。
+		
+
+vpp:
+	[DisallowMultipleComponent]只允许加一个脚本在同一个游戏物体上
+	Unity3D中序列化字段常使用[SerializeField],序列化类常采用[System.Serializable]，非序列化采用		
+	[System.NonSerialized]
+	值传递和引用传递：
+	引用类型是指字符串类型、数组类型、对象类型、类类型、接口类型、委托类型；
+	值类型包括基本类型（如int，char等）、结构类型（struct）、枚举类型。
+	update和fixedupdate区别：update是用来处理游戏的渲染逻辑，受运行的帧数的影响，
+	fixedupdate一般用来更新游戏中的物理逻辑，不受帧数影响，每秒钟有固定的运行次数.
+
+unity LOD group：
+	指根据物体模型的节点在显示环境中所处的位置和重要度，决定物体渲染的资源分配，降低非重要物体的
+	面数和细节度，从而获得高效率的渲染运算。
+	
+string.Format使用：
+	string str=string.Format("{0}要拼接的字符串{1}","第一个数据","第二个数据");
+
+unity画图工具：GL
